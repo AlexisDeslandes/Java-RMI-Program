@@ -2,6 +2,10 @@
 
 #### Par Alexis Deslandes
 
+## Rapport
+
+Le rapport est contenu dans le fichier "rapport_Alexis_Deslandes.pdf".
+
 ## Pour la compilation
 
 Pour procéder à la compilation du projet veuillez rentrer la commande suivante dans un terminal au niveau du dossier "**java-rmi-program**" :
