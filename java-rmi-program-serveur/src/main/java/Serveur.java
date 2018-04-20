@@ -1,6 +1,6 @@
 import java.rmi.RemoteException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
     @author Alexis Deslandes
@@ -8,20 +8,23 @@ import java.util.List;
 public class Serveur {
 
     private static Serveur serveur = new Serveur();
-    private List<InterfaceClient> clients;
+    private Map<Integer,InterfaceClient> clients;
+    private static int clientIdGenerator = 0;
 
     public static Serveur getINSTANCE(){
         return serveur;
     }
 
     private Serveur(){
-        this.clients = new LinkedList<>();
+        this.clients = new HashMap<>();
     }
 
     public void envoyerDonnees(String message){
-        for (InterfaceClient client : clients) {
+        for (int i =0;i<clients.size();i++) {
+            InterfaceClient client =(InterfaceClient) clients.values().toArray()[i];
+            int clientId =(int) clients.keySet().toArray()[i];
             try {
-                client.receptionne(message + ", le nombre de personnes connectées est de : " + clients.size());
+                client.receptionne("Client numéro : "+ clientId+", "+ message + ", le nombre de personnes connectées est de : " + clients.size());
             } catch (RemoteException e) {
                 e.printStackTrace();
                 System.out.println("Problèmes rencontrés dans l'envoie du message : Suppression du client.");
@@ -31,8 +34,9 @@ public class Serveur {
     }
 
     public void recoieAbonnement(InterfaceClient interfaceClient) {
-        this.clients.add(interfaceClient);
-        System.out.println("Un nouveau client s'est connecté !");
+        int id = clientIdGenerator++;
+        this.clients.put(id,interfaceClient);
+        System.out.println("Un nouveau client s'est connecté ! Client numéro : "+id);
     }
 
     public void recoieDesabonnement(InterfaceClient interfaceClient) {
